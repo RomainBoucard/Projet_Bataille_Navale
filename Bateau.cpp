@@ -5,7 +5,6 @@ using namespace std;
 // Bateau::Bateau(){
   
 // }
-
 // bool Bateau::checkTouche(int x,int y) const{
 //   int i;
 //   int j;
@@ -17,36 +16,38 @@ Bateau::Bateau(string nom, int taille, string debut, int direction){
     this->taille=taille;
     this->vivant=true;
     this->pdv=taille;
-    int i;
+    int i, line, column;
     int x = line_conversion(debut);
     int y = column_conversion(debut);
     switch (direction){
     case 0: //gauche
         for (i = 0; i < taille; i++)
         {
-            coordY.push_back(y-i);
-            coordX.push_back(x);
+          coordY.push_back(y-i);
+          coordX.push_back(x);
         }     
         break;
     case 1: //droite
         for (i = 0; i < taille; i++)
         {
-            coordY.push_back(y+i);
-            coordX.push_back(x);
+          line=x;
+          column=y+i;
+          coordY.push_back(column);
+          coordX.push_back(line);
         }        
         break;
     case 2: //haut
         for (i = 0; i < taille; i++)
         {
-            coordX.push_back(x-i);
-            coordY.push_back(y);
+          coordX.push_back(x-i);
+          coordY.push_back(y);
         }        
         break;
     case 3: //bas
         for (i = 0; i < taille; i++)
         {
-            coordX.push_back(x+i);
-            coordY.push_back(y);
+          coordX.push_back(x+i);
+          coordY.push_back(y);
         }        
         break;    
     default:
@@ -133,7 +134,7 @@ int Bateau::get_X(int x){
 }
 
 int Bateau::get_Y(int y){
-  return this->coordX[y];
+  return this->coordY[y];
 }
 
 void Bateau::get_Ys(){

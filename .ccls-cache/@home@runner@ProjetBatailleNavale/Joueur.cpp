@@ -324,6 +324,7 @@ bool Joueur::tir(Joueur *adversaire){
   } while (!check_coordonnees);
   adversaire->tir_recu(this, case_tire);
   this->affichageTir();
+  return true;
 }
 
 bool Joueur::get_TabTir(){
@@ -370,10 +371,12 @@ bool Joueur::tir_recu(Joueur *adversaire, string case_tire){
       cout << "TOuche" << bateau_TC << endl;
       cout << "Bateau touche" << endl;
       adversaire->GrilleTir[x][y]=2;
+      return true;
     }else{ //coulé
       cout << "Coule" << bateau_TC << endl;
       cout << "Bateau coule" << endl;
       this->bateau_coule(i, adversaire);
+      return true;
     }
   }
   else{
@@ -396,6 +399,7 @@ bool Joueur::get_tabBateaux(){
     cout << "y :" << tabDeBateau[i]->get_Y(1) << endl;;
     cout << endl;
   }
+  return true;
 }
 
 bool Joueur::bateau_coule(int bateau, Joueur *adversaire){
@@ -413,4 +417,5 @@ bool Joueur::bateau_coule(int bateau, Joueur *adversaire){
     cout << "case :" << i << endl;
   }
   cout << "Bateau detruit" << endl;
+  return true;
 }

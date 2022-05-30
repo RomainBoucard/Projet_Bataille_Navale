@@ -1,5 +1,5 @@
-main: main.o Joueur.o Bateau.o
-	g++ -o main main.o Joueur.o Bateau.o
+main: main.o Joueur.o Bateau.o JoueurTest.o
+	g++ -o main main.o Joueur.o Bateau.o JoueurTest.o
 main.o: main.cpp
 	g++ -c main.cpp
 Joueur.o: Joueur.cpp

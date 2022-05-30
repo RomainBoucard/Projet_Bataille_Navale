@@ -83,14 +83,17 @@ int main() {
   // cout << "Bonne chance " << Joueur1.getName() << endl;
 
   //game
+  string suite;
 
   Joueur1->creerBateau(Joueur2);
   
-  //Joueur1->get_tabBateaux();
+  Joueur1->get_tabBateaux();
   int i;
   for (i=0; i<10; i++){
     Joueur2->tir(Joueur1);
     cout << "Tir realise" << endl;
+    cout << "Appuyez sur une touche pour continuer...";
+    cin >> suite;
   }
   // Joueur1->get_tabBateaux();
 
