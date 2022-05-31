@@ -43,8 +43,8 @@
 #include <string>
 #include <type_traits>
 
-#include "gtest/gtest-message.h"
-#include "gtest/internal/gtest-port.h"
+#include "../gtest/gtest-message.h"
+#include "../gtest/internal/gtest-port.h"
 
 namespace testing {
 

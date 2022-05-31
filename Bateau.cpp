@@ -118,13 +118,10 @@ bool Bateau::perte_pdv(){
   }
   else{
     this->pdv=this->pdv-1;
-    cout << "PDV :" << this->pdv << endl;
     if(this->pdv==0){
-      cout << "mort" << endl;
       this->vivant=false;
       return false;
     }
-    cout << "vie" << endl;
     return true;
   }
 }

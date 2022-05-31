@@ -7,27 +7,46 @@ using namespace std;
 //Constante des tailles des différents bateaux
 int taille_bateaux[5] = {5, 4, 3, 3, 2};    
 
+void clear()
+{
+  std::cout << "\033[2J\033[1;1H";
+}
+
+void suivant(string message){
+  string entree;
+  cout << message;
+  cin >> entree;
+  cout << endl;
+}
 
 Joueur::Joueur(){
   this->nom = "x";
 	this->NombreDeBateaux = 0;
   this->tabDeBateau[4] ={NULL};
+  this->IA=false;
 
   // initGrilleBateau();
   // initGrilleTir();
 }
 
 string Joueur::getName(){
-  cout << "Fonction getName" << endl;
   return nom;
+}
+
+void Joueur::setNombreBateau(int x){
+  this->NombreDeBateaux = x;
 }
 
 void Joueur::setName(string name){
   this->nom = name;
 }
 
-bool Joueur::win(){
-  bool retVal = (this->NombreDeBateaux == 1) ? true : false;   
+void Joueur::setIA(bool val){
+  this->IA = val;
+}
+
+bool Joueur::lose(){
+  bool retVal = (this->NombreDeBateaux == 0) ? true : false;   
   return retVal;
 }
 
@@ -43,34 +62,55 @@ bool Joueur::creerBateau(Joueur *adversaire){
   string input;
   string choix_direction;
   int direction_bateau;
-  for(int i = 0; i<NB_BATEAUX; i++)
+  if(this->IA==0)
+  {
+    for(int i = 0; i<NB_BATEAUX; i++)
+    {
+      clear();
+      cout << this->nom << " positionnez vos bateaux sur la grille" << endl;
+      do
+      {
+        this->affichageBateau(adversaire);
+        cout << "Veuillez choisir une position de depart pour le bateau " << Bateaux[i] << endl;
+        cout << "Format attendu 'D5'" << endl;
+        cin >> input;
+        retVal=check_coord(input, taille_bateaux[i]);   //check coordonnées correctes +case libre + cases autour libre
+        if (!retVal){
+          cout << "Coordonnees incorrectes ou espace insufisant" << endl << "Veuillez entrer une nouvelle case" << endl;
+          suivant("Inserez un caractere et appuyez sur Entree pour continuer..");
+        }
+      }while (!retVal) ;
+    
+      //Nombre de cases suffisant pour nouveau bateaux
+      //Choix de la direction
+      do
+      {
+        cout << "Veuillez choisir la direction de votre bateau " << Bateaux[i] << " depuis la case " << input << " :" << endl;
+        (this->direction[0]) ? cout << "  - Gauche : 0" << endl : cout << "";
+        (this->direction[1]) ? cout << "  - Droite : 1" << endl : cout << "";
+        (this->direction[2]) ? cout << "  - Haut : 2" << endl : cout << "";
+        (this->direction[3]) ? cout << "  - Bas : 3" << endl : cout << "";
+        cin >> choix_direction;
+        //Boucle tant que la direction choisi n'est pas possible ou la valeur inscrite est différente des valeurs possibles
+      } while (!this->direction[stoi(choix_direction)] | stoi(choix_direction)>3 | stoi(choix_direction)<0 );
+      direction_bateau =stoi(choix_direction);
+      //Création du bateau : appel constructeur + modif de la grilleBateau
+      Bateau *Bateau1 = new Bateau(Bateaux[i], taille_bateaux[i], input, direction_bateau);
+      tabDeBateau[i] = Bateau1;
+      retVal&=modifGrille(input, direction_bateau, taille_bateaux[i]);
+      this->NombreDeBateaux+=1;
+    }
+  }
+  else if (this->IA==1)
   {
     do
     {
-      this->affichageBateau(adversaire);
-      cout << "Veuillez choisir une position de depart pour le bateau " << Bateaux[i] << endl;
-      cin >> input;
-      retVal=check_coord(input, taille_bateaux[i]);   //check coordonnées correctes +case libre + cases autour libre
-      if (!retVal) cout << "Coordonnees incorrectes ou espace insufisant" << endl << "Veuillez entrer une nouvelle case" << endl;
-    }while (!retVal) ;
-
-    //Nombre de cases suffisant pour nouveau bateaux
-    //Choix de la direction
-    do
-    {
-      cout << "Veuillez choisir la direction de votre bateau" << Bateaux[i] << "depuis la case " << input << " :" << endl;
-      (this->direction[0]) ? cout << "  - Gauche : 0" << endl : cout << "";
-      (this->direction[1]) ? cout << "  - Droite : 1" << endl : cout << "";
-      (this->direction[2]) ? cout << "  - Haut : 2" << endl : cout << "";
-      (this->direction[3]) ? cout << "  - Bas : 3" << endl : cout << "";
-      cin >> choix_direction;
-      //Boucle tant que la direction choisi n'est pas possible ou la valeur inscrite est différente des valeurs possibles
-    } while (!this->direction[stoi(choix_direction)] | stoi(choix_direction)>3 | stoi(choix_direction)<0 );
-    direction_bateau =stoi(choix_direction);
-    //Création du bateau : appel constructeur + modif de la grilleBateau
-    Bateau *Bateau1 = new Bateau(Bateaux[i], taille_bateaux[i], input, direction_bateau);
-    tabDeBateau[i] = Bateau1;
-    retVal&=modifGrille(input, direction_bateau, taille_bateaux[i]);
+      int X = (rand()%10)+65;
+      char s = (char) X;
+      int Y = rand()%10+1;
+      string input;      
+    }
+    while(true);
   }
   return retVal;
 }
@@ -225,8 +265,15 @@ int Joueur::column_conversion (string cellule){
 
 int Joueur::line_conversion (string cellule){
   cellule.erase(0,1);
+  int ascii;
   int line;
-  (cellule!="") ? line = stoi(cellule, nullptr)-1 : line=-1;
+  ascii = (int) cellule[0];
+  if (ascii>47 && ascii<58){
+    (cellule!="") ? line = stoi(cellule, nullptr)-1 : line=-1;
+  }
+  else{
+    line = -1;
+  }
   return line;
 }
 
@@ -301,7 +348,6 @@ bool Joueur::tir(Joueur *adversaire){
   do
   {
     check_coordonnees=true;
-    this->affichageTir();
     cout << "Veuillez choisir la case sur laquelle vous voulez tirer " << endl;
     cin >> case_tire;
     int x = line_conversion(case_tire);
@@ -323,7 +369,6 @@ bool Joueur::tir(Joueur *adversaire){
     }
   } while (!check_coordonnees);
   adversaire->tir_recu(this, case_tire);
-  this->affichageTir();
   return true;
 }
 
@@ -331,6 +376,7 @@ bool Joueur::get_TabTir(){
   for (string& x : TableauDeTir) {
     cout << x << endl; 
   }
+  return true;
 }
 
 bool Joueur::initGrilleBateau(){
@@ -341,6 +387,7 @@ bool Joueur::initGrilleBateau(){
       GrilleBateau[i][j]=false;
     }
   }
+  return true;
 }
 
 bool Joueur::initGrilleTir(){
@@ -351,6 +398,7 @@ bool Joueur::initGrilleTir(){
       GrilleTir[i][j]=0;
     }
   }
+  return true;
 }
 
 bool Joueur::tir_recu(Joueur *adversaire, string case_tire){
@@ -366,14 +414,11 @@ bool Joueur::tir_recu(Joueur *adversaire, string case_tire){
       if(bateau_touche==true) break;
     }
     bateau_TC=tabDeBateau[i]->perte_pdv(); //perte point de vie d'un bateau
-    cout << bateau_TC << endl;
     if(bateau_TC==true){ //touché
-      cout << "TOuche" << bateau_TC << endl;
       cout << "Bateau touche" << endl;
       adversaire->GrilleTir[x][y]=2;
       return true;
     }else{ //coulé
-      cout << "Coule" << bateau_TC << endl;
       cout << "Bateau coule" << endl;
       this->bateau_coule(i, adversaire);
       return true;
@@ -403,19 +448,15 @@ bool Joueur::get_tabBateaux(){
 }
 
 bool Joueur::bateau_coule(int bateau, Joueur *adversaire){
-  cout << "Fonction bateau coule" << endl;
   int taille;
   taille=taille_bateaux[bateau];
   int i, x, y;
-  cout << "Taille :" << taille << endl;
   for(i=0; i<taille; i++){
     x=this->tabDeBateau[bateau]->get_X(i);
     y=this->tabDeBateau[bateau]->get_Y(i);
     adversaire->GrilleTir[x][y]=3;
-    cout << "x :" << x << endl;
-    cout << "y :" << y << endl;
-    cout << "case :" << i << endl;
   }
+  this->NombreDeBateaux-=1;
   cout << "Bateau detruit" << endl;
   return true;
 }
