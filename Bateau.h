@@ -9,10 +9,15 @@ using namespace std;
 class Bateau {
   private :
 
+    /** Nom du bateau */
     string nom;
+    /** Taille du bateau */
     int taille;
+    /** Nombre de points de vie restants */
     int pdv;
+    /** Numéros des lignes des cases du bateau */
     vector <int> coordX;
+    /** Numéros des colonnes des cases du bateau */
     vector <int> coordY;
     bool vivant;
 

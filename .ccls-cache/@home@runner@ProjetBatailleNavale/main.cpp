@@ -32,7 +32,6 @@ int GrilleBateaud[10][10] = {
 int main() {
   srand (time(NULL)); //initialisation de srand pour la valeur aleatoire
   // string elem;
-  cout << "Hello\n";
   
   Joueur *Joueur1 = new Joueur;
   Joueur *Joueur2 = new Joueur;
@@ -47,6 +46,11 @@ int main() {
   bool fin = true;
 
   // Game
+  cout << RED << "Bataille Navale" << NOCOLOUR<< endl;
+  getchar_unlocked();
+  cout << "Veuillez choisir un mode de jeu :\n" << "0 pour jouer à deux joueurs \n" << "1 pour jouer face à une IA" << endl;
+  cin >> entree;
+  
   // Init des joueurs
   cout << "Joueur 1, veuillez inscrire votre nom : ";
   cin >> entree;

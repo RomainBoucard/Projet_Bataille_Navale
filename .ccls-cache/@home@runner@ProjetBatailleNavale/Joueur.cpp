@@ -108,7 +108,7 @@ bool Joueur::creerBateau(Joueur *adversaire){
       int X = (rand()%10)+65;
       char s = (char) X;
       int Y = rand()%10+1;
-      string input;      
+      
     }
     while(true);
   }
